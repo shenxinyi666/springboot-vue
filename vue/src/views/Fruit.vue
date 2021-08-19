@@ -1,14 +1,13 @@
 <template>
   <div style="padding: 10px">
-
-<!--    功能区域-->
+    <!--    功能区域-->
     <div style="margin: 10px 0">
-      <el-button type="primary" @click="add">新增</el-button>
+      <el-button type="primary" @click="add" v-if="user.role === 1">新增</el-button>
     </div>
 
-<!--    搜索区域-->
+    <!--    搜索区域-->
     <div style="margin: 10px 0">
-      <el-input v-model="search" placeholder="请输入用户名" style="width: 20%" clearable></el-input>
+      <el-input v-model="search" placeholder="请输入水果名称" style="width: 20%" clearable></el-input>
       <el-button type="primary" style="margin-left: 5px" @click="load">查询</el-button>
     </div>
     <el-table
@@ -24,36 +23,35 @@
       >
       </el-table-column>
       <el-table-column
-          prop="username"
-          label="用户名">
+          prop="name"
+          label="名称">
       </el-table-column>
       <el-table-column
-          prop="nickName"
-          label="昵称">
+          prop="price"
+          label="单价">
       </el-table-column>
       <el-table-column
-          prop="age"
-          label="年龄">
+          prop="source"
+          label="产地">
       </el-table-column>
       <el-table-column
-          prop="sex"
-          label="性别">
+          prop="productionDate"
+          label="生产日期">
       </el-table-column>
       <el-table-column
-          prop="address"
-          label="地址">
-      </el-table-column>
-      <el-table-column
-          label="角色">
+          label="图片">
         <template #default="scope">
-          <span v-if="scope.row.role === 1">管理员</span>
-          <span v-if="scope.row.role === 2">普通用户</span>
+          <el-image
+              style="width: 100px; height: 100px"
+              :src="scope.row.picture"
+              :preview-src-list="[scope.row.picture]">
+          </el-image>
         </template>
       </el-table-column>
       <el-table-column label="操作">
         <template #default="scope">
-          <el-button size="mini" @click="handleEdit(scope.row)">编辑</el-button>
-          <el-popconfirm title="确定删除吗？" @confirm="handleDelete(scope.row.id)">
+          <el-button size="mini" @click="handleEdit(scope.row)" v-if="user.role === 1">编辑</el-button>
+          <el-popconfirm title="确定删除吗？" @confirm="handleDelete(scope.row.id)" v-if="user.role === 1">
             <template #reference>
               <el-button size="mini" type="danger">删除</el-button>
             </template>
@@ -73,24 +71,24 @@
           :total="total">
       </el-pagination>
 
-      <el-dialog title="用户管理" v-model="dialogVisible" width="30%">
+      <el-dialog title="水果管理" v-model="dialogVisible" width="30%">
         <el-form :model="form" label-width="120px">
-          <el-form-item label="用户名">
-            <el-input v-model="form.username" style="width: 80%"></el-input>
+          <el-form-item label="名称">
+            <el-input v-model="form.name" style="width: 80%"></el-input>
           </el-form-item>
-          <el-form-item label="昵称">
-            <el-input v-model="form.nickName" style="width: 80%"></el-input>
+          <el-form-item label="价格">
+            <el-input v-model="form.price" style="width: 80%"></el-input>
           </el-form-item>
-          <el-form-item label="年龄">
-            <el-input v-model="form.age" style="width: 80%"></el-input>
+          <el-form-item label="产地">
+            <el-input v-model="form.source" style="width: 80%"></el-input>
           </el-form-item>
-          <el-form-item label="性别">
-            <el-radio v-model="form.sex" label="男">男</el-radio>
-            <el-radio v-model="form.sex" label="女">女</el-radio>
-            <el-radio v-model="form.sex" label="未知">未知</el-radio>
+          <el-form-item label="生产日期">
+            <el-date-picker v-model="form.productionDate" value-format="YYYY-MM-DD" type="date" style="width: 80%" clearable></el-date-picker>
           </el-form-item>
-          <el-form-item label="地址">
-            <el-input type="textarea" v-model="form.address" style="width: 80%"></el-input>
+          <el-form-item label="图片">
+            <el-upload ref="upload" :action="filesUploadUrl" :on-success="filesUploadSuccess">
+              <el-button type="primary">点击上传</el-button>
+            </el-upload>
           </el-form-item>
         </el-form>
         <template #footer>
@@ -111,12 +109,13 @@
 import request from "@/utils/request";
 
 export default {
-  name: 'Home',
+  name: 'Fruit',
   components: {
 
   },
   data() {
     return {
+      user: {},
       loading: true,
       form: {},
       dialogVisible: false,
@@ -124,16 +123,30 @@ export default {
       currentPage: 1,
       pageSize: 10,
       total: 0,
-      tableData: []
+      tableData: [],
+      filesUploadUrl: "http://" + window.server.filesUploadUrl + ":9090/files/upload"
     }
   },
   created() {
+    let userStr = sessionStorage.getItem("user") || "{}"
+    this.user = JSON.parse(userStr)
+    // 请求服务端，确认当前登录用户的合法信息(相对安全，防止网页改user.role的值)
+    request.get("/user/" + this.user.id).then(res => {
+      if (res.code === '0') {
+        this.user = res.data
+      }
+    })
+
     this.load()
   },
   methods: {
+    filesUploadSuccess(res) {
+      console.log(res)
+      this.form.picture = res.data
+    },
     load() {
       this.loading = true
-      request.get("/user", {
+      request.get("/fruit", {
         params: {
           pageNum: this.currentPage,
           pageSize: this.pageSize,
@@ -148,10 +161,13 @@ export default {
     add() {
       this.dialogVisible = true
       this.form = {}
+      if (this.$refs['upload']) {
+        this.$refs['upload'].clearFiles()  // 清除历史文件列表
+      }
     },
     save() {
       if (this.form.id) {  // 更新
-        request.put("/user", this.form).then(res => {
+        request.put("/fruit", this.form).then(res => {
           console.log(res)
           if (res.code === '0') {
             this.$message({
@@ -168,7 +184,7 @@ export default {
           this.dialogVisible = false  // 关闭弹窗
         })
       }  else {  // 新增
-        request.post("/user", this.form).then(res => {
+        request.post("/fruit", this.form).then(res => {
           console.log(res)
           if (res.code === '0') {
             this.$message({
@@ -189,13 +205,19 @@ export default {
 
     },
     handleEdit(row) {
-      //实现对象深拷贝
       this.form = JSON.parse(JSON.stringify(row))
       this.dialogVisible = true
+      //this.$nextTick()将回调延迟到下次 DOM 更新循环之后执行。
+      this.$nextTick(() => {
+        if (this.$refs['upload']) {
+          this.$refs['upload'].clearFiles()  // 清除历史文件列表
+        }
+      })
+
     },
     handleDelete(id) {
       console.log(id)
-      request.delete("/user/" + id).then(res => {
+      request.delete("/fruit/" + id).then(res => {
         if (res.code === '0') {
           this.$message({
             type: "success",

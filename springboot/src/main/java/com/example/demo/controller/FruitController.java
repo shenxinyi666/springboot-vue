@@ -6,60 +6,53 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.demo.common.Result;
 import com.example.demo.entity.Book;
+import com.example.demo.entity.Fruit;
 import com.example.demo.mapper.BookMapper;
+import com.example.demo.mapper.FruitMapper;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
 @RestController
-@RequestMapping("/book")
-public class BookController {
+@RequestMapping("/fruit")
+public class FruitController {
 
     @Resource
-    BookMapper bookMapper;
+    FruitMapper fruitMapper;
 
     @PostMapping
-    public Result<?> save(@RequestBody Book book) {
-        bookMapper.insert(book);
+    public Result<?> save(@RequestBody Fruit fruit) {
+        fruitMapper.insert(fruit);
         return Result.success();
     }
 
     @PutMapping
-    public Result<?> update(@RequestBody Book book) {
-        bookMapper.updateById(book);
+    public Result<?> update(@RequestBody Fruit fruit) {
+        fruitMapper.updateById(fruit);
         return Result.success();
     }
 
     @DeleteMapping("/{id}")
     public Result<?> update(@PathVariable Integer id) {
-        bookMapper.deleteById(id);
+        fruitMapper.deleteById(id);
         return Result.success();
     }
 
     @GetMapping("/{id}")
     public Result<?> getById(@PathVariable Integer id) {
-        return Result.success(bookMapper.selectById(id));
+        return Result.success(fruitMapper.selectById(id));
     }
 
-    /**
-     * 注意：这个方法使用的是Mybatis sql的方式做的多表联合查询，大家可以点开，参考下怎么写多表查询
-     * @param userId
-     * @return
-     */
-    @GetMapping("/{userId}")
-    public Result<?> getByUserId(@PathVariable Integer userId) {
-        return Result.success(bookMapper.findByUserId(userId));
-    }
 
     @GetMapping
     public Result<?> findPage(@RequestParam(defaultValue = "1") Integer pageNum,
                               @RequestParam(defaultValue = "10") Integer pageSize,
                               @RequestParam(defaultValue = "") String search) {
-        LambdaQueryWrapper<Book> wrapper = Wrappers.<Book>lambdaQuery();
+        LambdaQueryWrapper<Fruit> wrapper = Wrappers.<Fruit>lambdaQuery();
         if (StrUtil.isNotBlank(search)) {
-            wrapper.like(Book::getName, search);
+            wrapper.like(Fruit::getName, search);
         }
-        Page<Book> BookPage = bookMapper.selectPage(new Page<>(pageNum, pageSize), wrapper);
-        return Result.success(BookPage);
+        Page<Fruit> FruitPage = fruitMapper.selectPage(new Page<>(pageNum, pageSize), wrapper);
+        return Result.success(FruitPage);
     }
 }

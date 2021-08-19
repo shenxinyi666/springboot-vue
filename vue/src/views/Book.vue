@@ -7,7 +7,7 @@
 
     <!--    搜索区域-->
     <div style="margin: 10px 0">
-      <el-input v-model="search" placeholder="请输入关键字" style="width: 20%" clearable></el-input>
+      <el-input v-model="search" placeholder="请输入书本名称" style="width: 20%" clearable></el-input>
       <el-button type="primary" style="margin-left: 5px" @click="load">查询</el-button>
     </div>
     <el-table
@@ -71,7 +71,7 @@
           :total="total">
       </el-pagination>
 
-      <el-dialog title="提示" v-model="dialogVisible" width="30%">
+      <el-dialog title="书籍管理" v-model="dialogVisible" width="30%">
         <el-form :model="form" label-width="120px">
           <el-form-item label="名称">
             <el-input v-model="form.name" style="width: 80%"></el-input>
@@ -130,7 +130,7 @@ export default {
   created() {
     let userStr = sessionStorage.getItem("user") || "{}"
     this.user = JSON.parse(userStr)
-    // 请求服务端，确认当前登录用户的 合法信息
+    // 请求服务端，确认当前登录用户的合法信息(相对安全，防止网页改user.role的值)
     request.get("/user/" + this.user.id).then(res => {
       if (res.code === '0') {
         this.user = res.data
