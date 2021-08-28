@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50533
 File Encoding         : 65001
 
-Date: 2021-08-19 17:13:22
+Date: 2021-08-28 21:14:55
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -48,12 +48,16 @@ CREATE TABLE `fruit` (
   `picture` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '图片',
   `user_id` int(11) DEFAULT NULL COMMENT '用户id',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
 -- Records of fruit
 -- ----------------------------
 INSERT INTO `fruit` VALUES ('1', '西柚', '10.00', '江苏', '2021-08-18 00:00:00', 'http://localhost:9090/files/af4733dc406c4615b8bda081732702c2', '1');
+INSERT INTO `fruit` VALUES ('2', '坚果', '30.00', '浙江', '2021-08-28 00:00:00', 'http://localhost:9090/files/987d06676c7e4bf593c7cf5759065833', '1');
+INSERT INTO `fruit` VALUES ('3', '柠檬', '15.00', '台湾', '2021-08-28 00:00:00', 'http://localhost:9090/files/bf237941c6904bef831b0a7ccbefb56f', '1');
+INSERT INTO `fruit` VALUES ('4', '芒果', '20.00', '云南', '2021-08-28 00:00:00', 'http://localhost:9090/files/ccf8bf4a219041e09419d1393d4b0314', '1');
+INSERT INTO `fruit` VALUES ('5', '橙子', '15.00', '江苏', '2021-08-28 00:00:00', 'http://localhost:9090/files/f87f2a9f7d1e480f9bbc62918e406429', '1');
 
 -- ----------------------------
 -- Table structure for `news`
@@ -88,10 +92,11 @@ CREATE TABLE `user` (
   `address` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '地址',
   `role` int(11) DEFAULT NULL COMMENT '角色，1：管理员，2：普通用户',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC COMMENT='用户信息表';
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC COMMENT='用户信息表';
 
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES ('1', 'admin', '123', '管理员', '20', '男', '北京', '1');
-INSERT INTO `user` VALUES ('2', 'zhangsan', '123', '张三', '20', '男', '上海', '2');
+INSERT INTO `user` VALUES ('1', '管理员', '123', '管理员', '20', '男', '北京', '1');
+INSERT INTO `user` VALUES ('2', '张三', '123', '张三', '20', '男', '上海', '2');
+INSERT INTO `user` VALUES ('3', '李四', '123', '李四', '18', '男', '深圳', '2');
