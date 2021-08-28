@@ -47,10 +47,19 @@ public class FruitController {
     @GetMapping
     public Result<?> findPage(@RequestParam(defaultValue = "1") Integer pageNum,
                               @RequestParam(defaultValue = "10") Integer pageSize,
-                              @RequestParam(defaultValue = "") String search) {
+                              @RequestParam(defaultValue = "") String search1,
+                              @RequestParam(defaultValue = "") String search2,
+                              @RequestParam(defaultValue = "") String search3,
+                              @RequestParam(defaultValue = "") String search4) {
         LambdaQueryWrapper<Fruit> wrapper = Wrappers.<Fruit>lambdaQuery();
-        if (StrUtil.isNotBlank(search)) {
-            wrapper.like(Fruit::getName, search);
+        if (StrUtil.isNotBlank(search1)) {
+            wrapper.like(Fruit::getName, search1);
+        }
+        if (StrUtil.isNotBlank(search2)) {
+            wrapper.eq(Fruit::getSource, search2);
+        }
+        if (StrUtil.isNotBlank(search3)||StrUtil.isNotBlank(search4)) {
+            wrapper.between(Fruit::getPrice, search3,search4);
         }
         Page<Fruit> FruitPage = fruitMapper.selectPage(new Page<>(pageNum, pageSize), wrapper);
         return Result.success(FruitPage);

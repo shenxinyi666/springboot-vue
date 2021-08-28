@@ -3,6 +3,7 @@
     <!--    功能区域-->
     <div style="margin: 10px 0">
       <el-button type="primary" @click="add">新增</el-button>
+      <el-button type="success" style="margin-left: 5px" @click="load">刷新</el-button>
     </div>
 
     <!--    搜索区域-->
@@ -37,8 +38,8 @@
       <el-table-column label="操作">
         <template #default="scope">
           <el-button size="mini" @click="details(scope.row)">详情</el-button>
-          <el-button size="mini" @click="handleEdit(scope.row)">编辑</el-button>
-          <el-popconfirm title="确定删除吗？" @confirm="handleDelete(scope.row.id)">
+          <el-button size="mini" @click="handleEdit(scope.row)" v-if="user.role===2?scope.row.author === user.nickName:true">编辑</el-button>
+          <el-popconfirm title="确定删除吗？" @confirm="handleDelete(scope.row.id)" v-if="user.role===2?scope.row.author === user.nickName:true">
             <template #reference>
               <el-button size="mini" type="danger">删除</el-button>
             </template>
@@ -99,6 +100,7 @@ export default {
   components: {},
   data() {
     return {
+      user: {},
       loading: true,
       form: {},
       dialogVisible: false,
@@ -112,6 +114,14 @@ export default {
     }
   },
   created() {
+    let userStr = sessionStorage.getItem("user") || "{}"
+    this.user = JSON.parse(userStr)
+    // 请求服务端，确认当前登录用户的合法信息(相对安全，防止网页改user.role的值)
+    request.get("/user/" + this.user.id).then(res => {
+      if (res.code === '0') {
+        this.user = res.data
+      }
+    })
     this.load()
   },
   methods: {

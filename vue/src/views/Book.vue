@@ -3,6 +3,7 @@
     <!--    功能区域-->
     <div style="margin: 10px 0">
       <el-button type="primary" @click="add" v-if="user.role === 1">新增</el-button>
+      <el-button type="success" style="margin-left: 5px" @click="load">刷新</el-button>
     </div>
 
     <!--    搜索区域-->

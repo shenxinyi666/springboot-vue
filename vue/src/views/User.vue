@@ -4,6 +4,7 @@
 <!--    功能区域-->
     <div style="margin: 10px 0">
       <el-button type="primary" @click="add">新增</el-button>
+      <el-button type="success" style="margin-left: 5px" @click="load">刷新</el-button>
     </div>
 
 <!--    搜索区域-->
@@ -87,7 +88,6 @@
           <el-form-item label="性别">
             <el-radio v-model="form.sex" label="男">男</el-radio>
             <el-radio v-model="form.sex" label="女">女</el-radio>
-            <el-radio v-model="form.sex" label="未知">未知</el-radio>
           </el-form-item>
           <el-form-item label="地址">
             <el-input type="textarea" v-model="form.address" style="width: 80%"></el-input>

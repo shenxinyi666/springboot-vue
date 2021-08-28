@@ -1,13 +1,13 @@
 <template>
-  <div style="width: 100%; height: 100vh; overflow: hidden"> <!--  :style="bg" 加背景图片-->
+  <div style="width: 100%; height: 100vh; overflow: hidden" :style="bg"> <!--  :style="bg" 加背景图片-->
     <div style="width: 400px; margin: 100px auto">
-      <div style="font-size: 30px; text-align: center; padding: 30px 0">欢迎登录</div>
-      <el-form ref="form" :model="form" size="normal" :rules="rules">
+      <div style="font-size: 50px; text-align: center; padding: 30px 0;color:coral">欢迎登录</div>
+      <el-form ref="form" :model="form" size="normal" :rules="rules" style="color: coral">
         <el-form-item prop="username">
-          <el-input prefix-icon="el-icon-user-solid" v-model="form.username"></el-input>
+          用户名：<el-input prefix-icon="el-icon-user-solid" v-model="form.username"></el-input>
         </el-form-item>
         <el-form-item prop="password">
-          <el-input prefix-icon="el-icon-lock" v-model="form.password" show-password></el-input>
+          密码：<el-input prefix-icon="el-icon-lock" v-model="form.password" show-password></el-input>
         </el-form-item>
         <el-form-item>
           <el-radio v-model="form.role" :label="1">管理员</el-radio>
@@ -15,6 +15,9 @@
         </el-form-item>
         <el-form-item>
           <el-button style="width: 100%" type="primary" @click="login">登 录</el-button>
+        </el-form-item>
+        <el-form-item>
+          <el-button style="width: 100%" type="primary" @click="register">注 册</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -38,17 +41,20 @@ export default {
         ],
       },
       // 加背景图片
-      // bg: {
-      //   backgroundImage: "url(" + require("@/assets/bg.jpg") + ")",
-      //   backgroundRepeat: "no-repeat",
-      //   backgroundSize: "100% 100%"
-      // }
+      bg: {
+        backgroundImage: "url(" + require("@/assets/bg.jpg") + ")",
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "100% 100%"
+      }
     }
   },
   created() {
     sessionStorage.removeItem("user")
   },
   methods: {
+    register(){
+      this.$router.push("/register")
+    },
     login() {
       this.$refs['form'].validate((valid) => {
         if (valid) {
