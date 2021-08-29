@@ -73,6 +73,13 @@ public class UserController {
         return Result.success(userMapper.selectList(null));
     }
 
+    /**
+     * 用户分页列表查询，包含书籍表的一对多查询
+     * @param pageNum
+     * @param pageSize
+     * @param search
+     * @return
+     */
     @GetMapping
     public Result<?> findPage(@RequestParam(defaultValue = "1") Integer pageNum,
                               @RequestParam(defaultValue = "10") Integer pageSize,
@@ -81,7 +88,7 @@ public class UserController {
         if (StrUtil.isNotBlank(search)) {
             wrapper.like(User::getUsername, search);
         }
-        Page<User> userPage = userMapper.selectPage(new Page<>(pageNum, pageSize), wrapper);
+        Page<User> userPage = userMapper.findPage(new Page<>(pageNum, pageSize), search);
         return Result.success(userPage);
     }
 }

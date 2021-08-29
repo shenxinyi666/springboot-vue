@@ -1,5 +1,5 @@
 <template>
-  <div style="padding: 10px">
+  <div style="padding: 10px;">
 
 <!--    功能区域-->
     <div style="margin: 10px 0">
@@ -17,7 +17,7 @@
         :data="tableData"
         border
         stripe
-        style="width: 100%">
+        style="width: 100%;">
       <el-table-column
           prop="id"
           label="ID"
@@ -51,8 +51,9 @@
           <span v-if="scope.row.role === 2">普通用户</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作">
+      <el-table-column label="操作" width="260">
         <template #default="scope">
+          <el-button size="mini" type="success" plain @click="showBooks(scope.row.bookList)">查看图书列表</el-button>
           <el-button size="mini" @click="handleEdit(scope.row)">编辑</el-button>
           <el-popconfirm title="确定删除吗？" @confirm="handleDelete(scope.row.id)">
             <template #reference>
@@ -73,6 +74,14 @@
           layout="total, sizes, prev, pager, next, jumper"
           :total="total">
       </el-pagination>
+
+      <el-dialog title="用户拥有的图书列表" v-model="bookVis" width="30%">
+        <el-table :data="bookList" stripe border>
+          <el-table-column prop="id" label="ID"></el-table-column>
+          <el-table-column prop="name" label="名称"></el-table-column>
+          <el-table-column prop="price" label="价格"></el-table-column>
+        </el-table>
+      </el-dialog>
 
       <el-dialog title="用户管理" v-model="dialogVisible" width="30%">
         <el-form :model="form" label-width="120px">
@@ -120,17 +129,23 @@ export default {
       loading: true,
       form: {},
       dialogVisible: false,
+      bookVis: false,
       search: '',
       currentPage: 1,
       pageSize: 10,
       total: 0,
-      tableData: []
+      tableData: [],
+      bookList: []
     }
   },
   created() {
     this.load()
   },
   methods: {
+    showBooks(books) {
+      this.bookList = books
+      this.bookVis = true
+    },
     load() {
       this.loading = true
       request.get("/user", {

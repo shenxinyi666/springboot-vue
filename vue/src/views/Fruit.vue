@@ -58,7 +58,7 @@
                     </el-image>
                 </template>
             </el-table-column>
-            <el-table-column label="操作">
+            <el-table-column label="操作" v-if="user.role === 1">
                 <template #default="scope">
                     <el-button size="mini" @click="handleEdit(scope.row)" v-if="user.role === 1">编辑</el-button>
                     <el-popconfirm title="确定删除吗？" @confirm="handleDelete(scope.row.id)" v-if="user.role === 1">
