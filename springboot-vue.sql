@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50533
 File Encoding         : 65001
 
-Date: 2021-08-28 21:14:55
+Date: 2021-08-29 21:52:56
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -28,12 +28,38 @@ CREATE TABLE `book` (
   `cover` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '封面地址',
   `user_id` int(11) DEFAULT NULL COMMENT '用户id',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
 -- Records of book
 -- ----------------------------
-INSERT INTO `book` VALUES ('1', 'Java', '100.00', '小张', '2010-07-01 00:00:00', 'http://localhost:9090/files/5ba48630deb248b5b5962ec001f495d5', '1');
+INSERT INTO `book` VALUES ('1', 'Java', '100.00', '管理员', '2021-08-28 00:00:00', 'http://localhost:9090/files/5ba48630deb248b5b5962ec001f495d5', '1');
+INSERT INTO `book` VALUES ('2', 'Java核心技术', '200.00', '管理员', '2021-08-28 00:00:00', 'http://localhost:9090/files/54fc8ab4fe034f2b892bc833b6a880b5', '1');
+INSERT INTO `book` VALUES ('3', 'C#', '150.00', '张三', '2021-08-28 00:00:00', 'http://localhost:9090/files/fe6ca72515ee452b80299421aa42c4af', '2');
+INSERT INTO `book` VALUES ('4', 'C++', '160.00', '张三', '2021-08-28 00:00:00', 'http://localhost:9090/files/a9c7d04395e64d689cfce8e3b9867456', '2');
+INSERT INTO `book` VALUES ('5', 'Python', '60.00', '李四', '2021-08-28 00:00:00', 'http://localhost:9090/files/7472a69684cb41b29b95dfc0ade3b9f3', '3');
+INSERT INTO `book` VALUES ('6', 'HTML5', '160.00', '李四', '2021-08-28 00:00:00', 'http://localhost:9090/files/9d938eebd1df48fa90e8d9e3a36b3ace', '3');
+
+-- ----------------------------
+-- Table structure for `category`
+-- ----------------------------
+DROP TABLE IF EXISTS `category`;
+CREATE TABLE `category` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '名称',
+  `pid` int(11) DEFAULT NULL COMMENT '父节点id',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+
+-- ----------------------------
+-- Records of category
+-- ----------------------------
+INSERT INTO `category` VALUES ('1', '文学', null);
+INSERT INTO `category` VALUES ('2', '童书', '1');
+INSERT INTO `category` VALUES ('3', '社会科学', '1');
+INSERT INTO `category` VALUES ('4', '经济学', '1');
+INSERT INTO `category` VALUES ('5', '科普百科', '2');
+INSERT INTO `category` VALUES ('7', '法律', '3');
 
 -- ----------------------------
 -- Table structure for `fruit`
