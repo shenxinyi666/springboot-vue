@@ -6,6 +6,7 @@
         router
         class="el-menu-vertical-demo">
       <!--控制系统管理的显示-->
+      <el-menu-item index="/home">主页</el-menu-item>
       <el-submenu index="1" v-if="user.role === 1">
         <template #title>系统管理</template>
         <el-menu-item index="/user">用户管理</el-menu-item>
@@ -14,6 +15,9 @@
       <el-menu-item index="/fruit">水果管理</el-menu-item>
       <el-menu-item index="/news">新闻管理</el-menu-item>
       <el-menu-item index="/category">分类管理</el-menu-item>
+      <el-menu-item index="/map">百度地图</el-menu-item>
+      <el-menu-item index="/im">聊天室</el-menu-item>
+      <el-menu-item index="/message">在线留言</el-menu-item>
     </el-menu>
   </div>
 </template>

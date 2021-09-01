@@ -5,7 +5,9 @@
     <div style="width: 100px">
       <el-dropdown>
         <span class="el-dropdown-link">
-          {{ user.nickName }}<i class="el-icon-arrow-down el-icon--right"></i>
+          <el-avatar :size="30" :src="user.avatar" style="position: relative; top: 10px"></el-avatar>
+           {{ user.nickName }}
+          <i class="el-icon-arrow-down el-icon--right"></i>
         </span>
         <template #dropdown>
           <el-dropdown-menu>
@@ -19,18 +21,15 @@
 </template>
 
 <script>
-export default {
-  name: "Header",
-  data() {
-    return {
-      user: {}
+  export default {
+    name: "Header",
+    props: ['user'],
+    data() {
+
+    },
+    created() {
     }
-  },
-  created() {
-    let str = sessionStorage.getItem("user") || "{}"
-    this.user = JSON.parse(str)
   }
-}
 </script>
 
 <style scoped>

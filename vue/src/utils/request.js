@@ -15,13 +15,14 @@ const whiteUrls = ["/user/login", '/user/register']
 request.interceptors.request.use(config => {
     config.headers['Content-Type'] = 'application/json;charset=utf-8';
 
-    // config.headers['token'] = user.token;  // 设置请求头
-
+    // 取出sessionStorage里面缓存的用户信息
+    let userJson = sessionStorage.getItem("user")
     if (!whiteUrls.includes(config.url)) {  // 校验请求白名单
-        // 取出sessionStorage里面缓存的用户信息
-        let userJson = sessionStorage.getItem("user")
-        if (!userJson) {
+        if(!userJson) {
             router.push("/login")
+        } else {
+            let user = JSON.parse(userJson);
+            config.headers['token'] = user.token;  // 设置请求头
         }
     }
     return config
@@ -42,6 +43,11 @@ request.interceptors.response.use(
         if (typeof res === 'string') {
             res = res ? JSON.parse(res) : res
         }
+        // 验证token
+        if (res.code === '401') {
+            console.error("token过期，重新登录")
+            router.push("/login")
+        }
         return res;
     },
     error => {
@@ -52,4 +58,3 @@ request.interceptors.response.use(
 
 
 export default request
-

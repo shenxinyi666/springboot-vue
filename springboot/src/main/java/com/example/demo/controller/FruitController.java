@@ -15,7 +15,7 @@ import javax.annotation.Resource;
 
 @RestController
 @RequestMapping("/fruit")
-public class FruitController {
+public class FruitController extends BaseController {
 
     @Resource
     FruitMapper fruitMapper;

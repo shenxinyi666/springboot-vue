@@ -1,7 +1,7 @@
 <template>
   <div style="width: 100%; height: 100vh; overflow: hidden" :style="bg"> <!--  :style="bg" 加背景图片-->
     <div style="width: 400px; margin: 100px auto">
-      <div style="font-size: 30px; text-align: center; padding: 30px 0;color:coral">欢迎登录</div>
+      <div style="font-size: 50px; text-align: center; padding: 30px 0;color:coral">欢迎登录</div>
       <el-form ref="form" :model="form" size="normal" :rules="rules" style="color: coral">
         <el-form-item prop="username">
           用户名：<el-input prefix-icon="el-icon-user-solid" v-model="form.username"></el-input>
@@ -32,82 +32,73 @@
 </template>
 
 <script>
-import request from "@/utils/request";
-import ValidCode from "@/components/ValidCode";
+  import request from "@/utils/request";
+  import ValidCode from "@/components/ValidCode";
 
-export default {
-  name: "Login",
-  components: {
-    ValidCode
-  },
-  data() {
-    return {
-      form: {role: 1},
-      rules: {
-        username: [
-          {required: true, message: '请输入用户名', trigger: 'blur'},
-        ],
-        password: [
-          {required: true, message: '请输入密码', trigger: 'blur'},
-        ],
-      },
-      // 加背景图片
-      bg: {
-        backgroundImage: "url(" + require("@/assets/bg.jpg") + ")",
-        backgroundRepeat: "no-repeat",
-        backgroundSize: "100% 100%"
-      },
-      validCode: ''
-    }
-  },
-  created() {
-    sessionStorage.removeItem("user")
-  },
-  methods: {
-    // 接收验证码组件提交的 4位验证码
-    createValidCode(data) {
-      this.validCode = data
+  export default {
+    name: "Login",
+    components: {
+      ValidCode
     },
-    register(){
-      this.$router.push("/register")
-    },
-    login() {
-      this.$refs['form'].validate((valid) => {
-        if (valid) {
-          if (!this.form.validCode) {
-            this.$message.error("请填写验证码")
-            return
-          }
-          if(this.form.validCode.toLowerCase() !== this.validCode.toLowerCase()) {
-            this.$message.error("验证码错误")
-            return
-          }
-          request.post("/user/login", this.form).then(res => {
-            if (res.code === '0') {
-              this.$message({
-                type: "success",
-                message: "登录成功"
-              })
-              sessionStorage.setItem("user", JSON.stringify(res.data)) // 缓存用户信息
-
-              if(this.form.role===1){
-                this.$router.push("/")  //登录成功之后进行页面的跳转，跳转到主页
-              }else {
-                this.$router.push("/book")
-              }
-
-            } else {
-              this.$message({
-                type: "error",
-                message: res.msg
-              })
-            }
-          })
+    data() {
+      return {
+        form: {role: 1},
+        rules: {
+          username: [
+            {required: true, message: '请输入用户名', trigger: 'blur'},
+          ],
+          password: [
+            {required: true, message: '请输入密码', trigger: 'blur'},
+          ],
+        },
+        validCode: '',
+        //加背景图片
+        bg: {
+          backgroundImage: "url(" + require("@/assets/bg.jpg") + ")",
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "100% 100%"
         }
-      })
+      }
+    },
+    created() {
+      sessionStorage.removeItem("user")
+    },
+    methods: {
+      // 接收验证码组件提交的 4位验证码
+      createValidCode(data) {
+        this.validCode = data
+      },
+      login() {
+        this.$refs['form'].validate((valid) => {
+          if (valid) {
+            if (!this.form.validCode) {
+              this.$message.error("请填写验证码")
+              return
+            }
+            if(this.form.validCode.toLowerCase() !== this.validCode.toLowerCase()) {
+              this.$message.error("验证码错误")
+              return
+            }
+            request.post("/user/login", this.form).then(res => {
+              if (res.code === '0') {
+                this.$message({
+                  type: "success",
+                  message: "登录成功"
+                })
+                sessionStorage.setItem("user", JSON.stringify(res.data))  // 缓存用户信息
+                this.$router.push("/")  //登录成功之后进行页面的跳转，跳转到主页
+              } else {
+                this.$message({
+                  type: "error",
+                  message: res.msg
+                })
+              }
+            })
+          }
+        })
+      }
     }
   }
-}
 </script>
 
 <style scoped>

@@ -6,8 +6,13 @@ const routes = [
         path: '/',
         name: 'Layout',
         component: Layout,
-        redirect: "/user",
+        redirect: "/home",
         children: [
+            {
+                path: 'home',
+                name: 'Home',
+                component: () => import("@/views/Home"),
+            },
             {
                 path: 'user',
                 name: 'User',
@@ -37,6 +42,21 @@ const routes = [
                 path: 'category',
                 name: 'Category',
                 component: () => import("@/views/Category"),
+            },
+            {
+                path: 'map',
+                name: 'Map',
+                component: () => import("@/views/Map"),
+            },
+            {
+                path: 'im',
+                name: 'Im',
+                component: () => import("@/views/Im"),
+            },
+            {
+                path: 'message',
+                name: 'Message',
+                component: () => import("@/views/Message"),
             }
         ]
     },
