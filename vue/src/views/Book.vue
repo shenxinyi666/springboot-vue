@@ -65,8 +65,9 @@
                     </el-image>
                 </template>
             </el-table-column>
-            <el-table-column label="操作" v-if="user.role === 1">
+            <el-table-column label="操作">
                 <template #default="scope">
+                    <el-button type="primary" size="mini" @click="buy(scope.row.id)">购买</el-button><br><br>
                     <el-button size="mini" @click="handleEdit(scope.row)" v-if="user.role === 1">编辑</el-button>
                     <el-popconfirm title="确定删除吗？" @confirm="handleDelete(scope.row.id)" v-if="user.role === 1">
                         <template #reference>
@@ -157,6 +158,12 @@
             this.load()
         },
         methods: {
+            buy(bookId) {
+                request.get("/order/buy/" + bookId).then(res => {
+                    // 请求成功跳转沙箱支付的页面
+                    window.open(res.data)
+                })
+            },
             deleteBatch() {
                 if (!this.ids.length) {
                     this.$message.warning("请选择数据！")

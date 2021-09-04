@@ -58,7 +58,7 @@ public class UserController extends BaseController {
             return Result.error("-1", "用户名重复");
         }
         if (user.getPassword() == null) {
-            user.setPassword("123456");
+            user.setPassword("123");
         }
         user.setRole(2);
         userMapper.insert(user);
@@ -68,7 +68,7 @@ public class UserController extends BaseController {
     @PostMapping
     public Result<?> save(@RequestBody User user) {
         if (user.getPassword() == null) {
-            user.setPassword("123456");
+            user.setPassword("123");
         }
         userMapper.insert(user);
         return Result.success();

@@ -6,12 +6,12 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
-import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.List;
 
 @TableName("user")
 @Data
-public class User implements Serializable {
+public class User {
     @TableId(type = IdType.AUTO)
     private Integer id;
     private String username;
@@ -28,4 +28,6 @@ public class User implements Serializable {
 
     @TableField(exist = false)
     private String token;
+
+    private BigDecimal account;
 }

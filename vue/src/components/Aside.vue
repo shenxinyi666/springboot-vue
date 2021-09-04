@@ -18,6 +18,7 @@
       <el-menu-item index="/map">百度地图</el-menu-item>
       <el-menu-item index="/im">聊天室</el-menu-item>
       <el-menu-item index="/message">在线留言</el-menu-item>
+      <el-menu-item index="/order">我的订单</el-menu-item>
     </el-menu>
   </div>
 </template>
